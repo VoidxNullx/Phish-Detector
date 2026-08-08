@@ -67,8 +67,8 @@ python data/generate_url_data.py
 
 - Real-world data behaves very differently from intuition — my hand-picked suspicious keyword list barely fired on actual phishing URLs, which led me to find published research instead of guessing
 - Edit distance is a genuinely useful tool for catching brand impersonation, but it has a real bias toward short strings that's worth checking for, not assuming away
-- A subtle type mismatch (comparing case-sensitive strings) can silently produce wrong results without throwing any error — the kind of bug that only shows up when you actually test against known cases, not just when the code "runs"
-- Precision and recall tell a more useful story than accuracy alone, especially for security applications where the cost of a false negative (missed phishing) and a false positive (blocked legitimate site) are very different
+- A subtle type mismatch (comparing case-sensitive strings) can silently produce wrong results without throwing any error
+- Precision and recall tell more useful information than accuracy alone, especially for security applications where the cost of a false negative (missed phishing) and a false positive (blocked legitimate site) are very different
 
 ## Next steps
 
