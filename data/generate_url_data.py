@@ -1,6 +1,10 @@
 import re
 import requests
 import pandas as pd
+from Levenshtein import distance
+from urllib.parse import urlparse
+import tldextract
+
 
 def get_url_length(url):
     return len(url)
@@ -21,16 +25,36 @@ def check_for_ip_address(url):
     else:
         return False
 
+def check_typosquatting(url):
+    brands = ["Apple", "Microsoft", "Google", "Amazon", "Samsung", "Coca Cola", "Toyota", "Mercedes Benz", "McDonald's", "Disney",
+           "Louis Vuitton", "Gucci", "Chanel", "Hermès", "Rolex", "Prada", "Dior", "Zara", "H&M", "Uniqlo", "Starbucks", "Pepsi",
+           "Nestlé", "KFC", "Domino's", "Heineken", "Budweiser", "Red Bull", "Subway", "Nescafé", "Intel", "Dell", "Lenovo", "HP",
+           "Sony", "LG", "Huawei", "Adobe", "Nvidia", "Cisco", "BMW", "Honda", "Audi", "Ford", "Volkswagen", "Porsche", "Ferrari",
+           "Hyundai", "Lexus", "Jeep", "Nike", "Adidas", "Puma", "Under Armour", "New Balance", "Reebok", "Vans", "Converse", "The North Face",
+           "Patagonia", "Netflix", "Warner Bros", "Spotify", "YouTube", "TikTok", "ESPN", "BBC", "Hulu", "Paramount", "Visa", "Mastercard", "PayPal",
+           "American Express", "JPMorgan Chase", "Bank of America", "HSBC", "Goldman Sachs", "Citi", "Allianz", "Ikea", "DHL", "Tesla"]
+           #extracted from https://brandyhq.com/blog/best-brands-of-the-world/
+    track = 100000
+
+    extracted = tldextract.extract(url)
+    domain_name = extracted.domain
+    for i in brands:
+        calculated_distance = distance(i, domain_name)
+        if calculated_distance < track:
+            track = calculated_distance
+           
+    if track != 0 and track <= 2:
+        return True
+    else:
+        return False
+
 
 phistank_df = pd.read_csv("https://data.phishtank.com/data/online-valid.csv")
 
 phistank_url = phistank_df['url']
-#print(phistank_url.head(6))
-#print(len(phistank_url))
 
 tranco_df = pd.read_csv("https://tranco-list.eu/top-1m.csv.zip", compression="zip", header=None, names=["rank", "domain"])
 prepend = "https://" + tranco_df["domain"]
-#print(prepend.head(6))
 
 phistank_sample = phistank_url.sample(n=5001)
 tranco_sample = prepend.sample(n=5001)
@@ -48,13 +72,11 @@ legit_df = pd.DataFrame({
 
 
 combined_df = pd.concat([phising_df,legit_df], ignore_index=True)
-#print(combined_df)
 
 combined_df["url_length"] = combined_df["Url"].apply(get_url_length)
 combined_df["contains_suspicious_words"] = combined_df["Url"].apply(suspicious_words)
 combined_df["ip_address"] = combined_df["Url"].apply(check_for_ip_address)
 
-#print(combined_df.head(6000))
-
-print(combined_df["contains_suspicious_words"].value_counts())
-print(combined_df["ip_address"].value_counts())
+print(check_typosquatting("https://paypa1.com/login"))
+print(check_typosquatting("https://google.com"))
+print(check_typosquatting("https://randomsite123xyz.com"))
