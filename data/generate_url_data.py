@@ -38,7 +38,10 @@ def check_typosquatting(url):
 
     extracted = tldextract.extract(url)
     domain_name = extracted.domain
+    domain_name = domain_name.lower()
+
     for i in brands:
+        i = i.lower()
         calculated_distance = distance(i, domain_name)
         if calculated_distance < track:
             track = calculated_distance
