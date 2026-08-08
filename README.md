@@ -79,4 +79,6 @@ python data/generate_url_data.py
 
 ## Author
 
+<img src="https://github.com/VoidxNullx.png" width="80" style="border-radius: 50%">
+
 Built by [Tarun](https://github.com/VoidxNullx), as part of an AI + Cybersecurity project series, alongside hands-on pentesting practice via TryHackMe and PortSwigger Web Security Academy.
