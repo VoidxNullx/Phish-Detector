@@ -84,26 +84,16 @@ combined_df["contains_suspicious_words"] = combined_df["Url"].apply(suspicious_w
 combined_df["ip_address"] = combined_df["Url"].apply(check_for_ip_address)
 combined_df["checking_typosquatting"] = combined_df["Url"].apply(check_typosquatting)
 
-
-# print(combined_df[combined_df["checking_typosquatting"] == True][["Url", "label"]].sample(10))
-
 x = (combined_df[['url_length', 'contains_suspicious_words', 'ip_address', 'checking_typosquatting']])
-
 y = (combined_df['label'])
 
 X_train, X_test, y_train, y_test = train_test_split(
     x, y, test_size=0.2
 )
 
-print(X_train)
-print(X_test)
-print(y_train)
-print(y_test)
-
 clf = RandomForestClassifier()
 clf.fit(X_train,y_train)
 dump(clf, 'models/RFC.joblib')
-
 
 y_prediction = clf.predict(X_test)
 print(f"Accuracy: {accuracy_score(y_test, y_prediction):.2f}")
