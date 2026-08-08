@@ -1,6 +1,5 @@
-import re
-import requests
 import pandas as pd
+import re
 from Levenshtein import distance
 from urllib.parse import urlparse
 import tldextract
@@ -79,7 +78,4 @@ combined_df = pd.concat([phising_df,legit_df], ignore_index=True)
 combined_df["url_length"] = combined_df["Url"].apply(get_url_length)
 combined_df["contains_suspicious_words"] = combined_df["Url"].apply(suspicious_words)
 combined_df["ip_address"] = combined_df["Url"].apply(check_for_ip_address)
-
-print(check_typosquatting("https://paypa1.com/login"))
-print(check_typosquatting("https://google.com"))
-print(check_typosquatting("https://randomsite123xyz.com"))
+combined_df["checking_typosquatting"] = combined_df["Url"].apply(check_typosquatting)
