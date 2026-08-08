@@ -50,8 +50,9 @@ Phish-Detector/
 │   └── generate_url_data.py   # data fetching, feature extraction, training
 ├── models/
 │   └── RFC.joblib              # trained model (generated, not committed)
-├── requirements.txt
-└── README.md
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
 ## Setup
